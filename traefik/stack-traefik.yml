@@ -32,20 +32,6 @@ services:
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
         - traefik.http.services.api.loadbalancer.server.port=8080
-        # REDIRECT HTTP
-        - traefik.http.routers.http-redirects.entrypoints=web
-        - traefik.http.routers.http-redirects.rule=hostregexp(`{host:(www\.)?.+}`)
-        - traefik.http.routers.http-redirects.middlewares=redirect-to-non-www-https
-        # REDIRECT WWW
-        - traefik.http.routers.www-redirects.entrypoints=websecure
-        - traefik.http.routers.www-redirects.rule=hostregexp(`{host:(www\.).+}`)
-        - traefik.http.routers.www-redirects.tls=true
-        - traefik.http.routers.www-redirects.tls.options=default
-        - traefik.http.routers.www-redirects.middlewares=redirect-to-non-www-https
-        # REDIRECT HTTPS
-        - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.regex=^https?://(?:www\.)?(.+)
-        - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.replacement=https://$${1}
-        - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.permanent=true
     ports:
       - target: 80
         published: 80

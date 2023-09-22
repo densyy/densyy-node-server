@@ -8,7 +8,6 @@ services:
 
   densyy-node-server:
     image: "densyy/densyy-node-server"
-    build: "./"
     networks:
       - traefik-public
     deploy:
