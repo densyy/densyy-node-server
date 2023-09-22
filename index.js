@@ -13,4 +13,8 @@ app.listen(port, () => console.log(`listening on port ${port}`))
 
 /* ---- Routes ---- */
 
-app.get('/', (_req, res) => res.status(200) )
+app.get('/', (_req, res) => {
+  return res
+    .status(200)
+    .json({ body: 'ok' })
+})
