@@ -1,0 +1,38 @@
+version: '3.8'
+
+networks:
+  traefik-public:
+    external: true
+
+services:
+
+  densyy-node-server:
+    image: "densyy/densyy-node-server"
+    build: "./"
+    networks:
+      - traefik-public
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        monitor: 30s
+        failure_action: rollback
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 7
+        window: 10s
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.densyy-node-server.entrypoints=websecure
+        - traefik.constraint-label=traefik-public
+        - traefik.http.services.densyy-node-server.loadbalancer.server.port=53100
+        # SSL
+        - traefik.http.routers.densyy-node-server.rule=Host(`autocannon.densyy.com`) #Subdomain
+        - traefik.http.routers.densyy-node-server.tls=true
+        - traefik.http.routers.densyy-node-server.service=densyy-node-server
+        - traefik.http.routers.densyy-node-server.tls.certresolver=letsencrypt
+        # MIDDLEWARES
+        - traefik.http.middlewares.test-compress.compress=true
+        - traefik.http.routers.densyy-node-server.middlewares=test-compress
