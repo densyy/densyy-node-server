@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  densyy-node-server:
+    image: "densyy/densyy-node-server"
+    build: "./"
+    restart: always
+    ports:
+      - "53100:53100"
+    volumes:
+      - "/volumes/densyy-node-server/:/host/densyy-node-server/"
+    networks:
+      default:
+        ipv4_address: "10.0.0.10"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "10.0.0.0/24"
